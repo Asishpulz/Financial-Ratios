@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financial Ratios Flashcards</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #003366;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .card {
+      background-color: #000000;
+      color: white;
+      width: 250px;
+      height: 150px;
+      perspective: 1000px;
+      cursor: pointer;
+      position: relative;
+    }
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      background-color: black;
+      color: white;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+    }
+    .tooltip {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.85);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 0.75em;
+      white-space: nowrap;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+    }
+    .card:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+<script>
+  const categories = {
+    "Financial Ratios": [
+      ["Current Ratio", "Current Assets / Current Liabilities", "Current Ratio: Measures a company's ability to repay short-term obligations. Also called Liquidity Ratio."],
+      ["Quick Ratio", "(Current Assets - Inventory) / Current Liabilities", "Quick Ratio: Assesses immediate short-term liquidity excluding inventory. Also known as Acid Test Ratio."],
+      ["Cash Ratio", "Cash & Equivalents / Current Liabilities", "Cash Ratio: Measures the most conservative liquidity position using only cash and equivalents."],
+      ["Total Debt Ratio", "(Total Assets - Equity) / Total Assets", "Total Debt Ratio: Indicates what proportion of a company’s assets are financed through debt."],
+      ["Debt-Equity Ratio", "Total Debt / Total Equity", "Debt-Equity Ratio: Shows the relative proportion of debt and equity used to finance assets."],
+      ["Equity Multiplier", "Total Assets / Total Equity", "Equity Multiplier: Reflects financial leverage. Higher value indicates more debt financing."],
+      ["Times Interest Earned", "EBIT / Interest Expense", "Times Interest Earned: Indicates how easily a company can cover interest expenses with its operating income."],
+      ["Cash Coverage", "(EBIT + Depreciation) / Interest Expense", "Cash Coverage: Measures ability to pay interest using cash-generating capacity (EBIT + Depreciation)."]
+    ],
+    "Operational Ratios": [
+      ["Inventory Turnover", "COGS / Average Inventory", "Inventory Turnover: Shows how many times inventory is sold and replaced over a period."],
+      ["Days Sales in Inventory", "365 / Inventory Turnover", "Days Sales in Inventory: Indicates the average number of days inventory is held before sale."],
+      ["Receivables Turnover", "Sales / Accounts Receivable", "Receivables Turnover: Shows how efficiently a firm collects its receivables."],
+      ["Days Sales in Receivables", "365 / Receivables Turnover", "Days Sales in Receivables: Average number of days to collect payment after a sale."],
+      ["Total Asset Turnover", "Sales / Total Assets", "Total Asset Turnover: Indicates how efficiently a company uses its assets to generate sales."]
+    ],
+    "Profitability Ratios": [
+      ["Profit Margin", "Net Income / Sales", "Profit Margin: Shows the percentage of revenue that translates into profit."],
+      ["Return on Assets(ROA)", "Net Income / Total Assets", "Return on Assets (ROA): Measures how profitable a company is relative to its total assets."],
+      ["Return on Equity(ROE)", "Net Income / Equity", "Return on Equity (ROE): Indicates how effectively equity is being used to generate profits."],
+      ["EBITDA Margin", "EBITDA / Revenue", "EBITDA Margin: Evaluates operational profitability before interest, taxes, depreciation, and amortization."]
+    ],
+    "Valuation Ratios": [
+      ["P/E Ratio", "Market Price per Share / EPS", "P/E Ratio: Assesses how much investors are willing to pay per rupee of earnings."],
+      ["Market-to-Book Ratio", "Market Value of Equity / Book Value of Equity", "Market-to-Book Ratio: Compares market value to book value of equity."],
+      ["Market Capitalization (₹ Cr)", "Share Price × Total Shares", "Market Capitalization: Total value of a company’s outstanding shares."],
+      ["Enterprise Value (₹ Cr)", "Market Cap + Debt - Cash", "Enterprise Value: Represents total firm value including debt and excluding cash."],
+      ["Enterprise multiple", "Enterprise Value / EBITDA", "Enterprise Multiple: Compares total firm value to earnings before interest, taxes, depreciation, and amortization."]
+    ]
+  };
+
+  const body = document.body;
+
+  for (const [sectionTitle, ratios] of Object.entries(categories)) {
+    const section = document.createElement('div');
+    section.className = 'section';
+
+    const heading = document.createElement('h2');
+    heading.textContent = sectionTitle;
+    section.appendChild(heading);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    ratios.forEach(([name, meaning, tooltip]) => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const cardInner = document.createElement('div');
+      cardInner.className = 'card-inner';
+
+      const front = document.createElement('div');
+      front.className = 'card-front';
+      front.textContent = name;
+
+      const back = document.createElement('div');
+      back.className = 'card-back';
+      back.textContent = meaning;
+
+      const tooltipEl = document.createElement('div');
+      tooltipEl.className = 'tooltip';
+      tooltipEl.textContent = tooltip;
+
+      card.appendChild(tooltipEl);
+      cardInner.appendChild(front);
+      cardInner.appendChild(back);
+      card.appendChild(cardInner);
+
+      card.addEventListener('click', () => {
+        card.classList.toggle('flipped');
+      });
+
+      grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+    body.appendChild(section);
+  }
+</script>
+
+</body>
+</html>
